@@ -4,7 +4,7 @@
 
     using TexasHoldem.Logic.Players;
 
-    internal class AlwaysCallDummyPlayer : BasePlayer
+    public class AlwaysCallDummyPlayer : BasePlayer
     {
         public override string Name { get; } = "AlwaysCallDummyPlayer_" + Guid.NewGuid();
 

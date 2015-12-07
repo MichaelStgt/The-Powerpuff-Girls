@@ -1,13 +1,13 @@
 // Much of this code is derived from poker.eval (look for it on sourceforge.net).
-// This library is covered by the LGPL Gnu license. See http://www.gnu.org/copyleft/lesser.html 
+// This library is covered by the LGPL Gnu license. See http://www.gnu.org/copyleft/lesser.html
 // for more information on this license.
 
-// This code is a very fast, native C# Texas Holdem hand evaluator (containing no interop or unsafe code). 
+// This code is a very fast, native C# Texas Holdem hand evaluator (containing no interop or unsafe code).
 // This code can enumarate 35 million 5 card hands per second and 29 million 7 card hands per second on my desktop machine.
 // That's not nearly as fast as the heavily macro-ed poker.eval C library. However, this implementation is
 // in roughly the same ballpark for speed and is quite usable in C#.
 
-// The speed ups are mostly table driven. That means that there are several very large tables included in this file. 
+// The speed ups are mostly table driven. That means that there are several very large tables included in this file.
 // The code is divided up into several files they are:
 //      HandEvaluator.cs - base hand evaluator
 //      HandIterator.cs - methods that support IEnumerable and methods that validate the hand evaluator
@@ -16,8 +16,6 @@
 // Written (ported) by Keith Rule - Sept 2005
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace TexasHoldem.AI.SmartPlayer.PreCalculations
@@ -25,8 +23,9 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
     public partial class Hand : IComparable
     {
         #region Analysis Functions
+
         /// <summary>
-        /// Used to calculate the wining information about each players hand. This function enumerates all 
+        /// Used to calculate the wining information about each players hand. This function enumerates all
         /// possible remaining hands and tallies win, tie and losses for each player. This function typically takes
         /// well less than a second regardless of the number of players.
         /// </summary>
@@ -61,7 +60,6 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             // Read board cards
             count = 0;
             boardmask = Hand.ParseHand("", board, ref count);
-           
 
 #if DEBUG
             Debug.Assert(count >= 0 && count <= 5); // The board must have zero or more cards but no more than a total of 5
@@ -146,9 +144,9 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
 
         /// <summary>
         /// Creates a Hand mask with the cards that will improve the specified players hand
-        /// against a list of opponents or if no opponents are list just the cards that improve the 
+        /// against a list of opponents or if no opponents are list just the cards that improve the
         /// players current had.
-        /// 
+        ///
         /// Please note that this only looks at single cards that improve the hand and will not specifically
         /// look at runner-runner possiblities.
         /// </summary>
@@ -162,9 +160,9 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             int ncards = Hand.BitCount(player | board);
 #if DEBUG
             Debug.Assert(Hand.BitCount(player) == 2); // Must have two cards for a legit set of pocket cards
-            if (ncards != 5 && ncards != 6) 
+            if (ncards != 5 && ncards != 6)
                 throw new ArgumentException("Outs only make sense after the flop and before the river");
-#endif           
+#endif
 
             if (opponents.Length > 0)
             {
@@ -188,7 +186,7 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
                     foreach (ulong oppmask in opponents)
                     {
                         uint oppHandVal = Hand.Evaluate(oppmask | board | card, ncards + 1);
-                       
+
                         bWinFlag = oppHandVal < playerHandVal && (playerNewHandType > playerOrigHandType || (playerNewHandType == playerOrigHandType && playerNewTopCard > playerOrigTopCard));
                         if (!bWinFlag)
                             break;
@@ -226,13 +224,13 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
         public static bool IsSuited(ulong mask)
         {
             int cards = BitCount(mask);
-           
+
             uint sc = CardMask(mask, Clubs);
             uint sd = CardMask(mask, Diamonds);
             uint sh = CardMask(mask, Hearts);
             uint ss = CardMask(mask, Spades);
 
-            return  BitCount(sc) == cards || BitCount(sd) == cards ||
+            return BitCount(sc) == cards || BitCount(sd) == cards ||
                     BitCount(sh) == cards || BitCount(ss) == cards;
         }
 
@@ -283,12 +281,13 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             if (start == 12 && end == 2) return 2;
             if (start == 12 && end == 3) return 3;
 
-            return start-end-1;
+            return start - end - 1;
         }
 
         #region Precalc Odds Table
+
         /// <summary>
-        /// This table is used by HandPlayerOpponentOdds and contains the odds of each type of 
+        /// This table is used by HandPlayerOpponentOdds and contains the odds of each type of
         /// hand occuring against a random player when the board is currently empty. This calculation
         /// normally takes about 5 minutes, so the values are precalculated to save time.
         /// </summary>
@@ -463,7 +462,8 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
              new double[] {0.00368818854595913, 0.0914915070392803, 0.117212702169422, 0.0277525564790994, 0.0395740061225062, 0.0589569284950546, 0.0191000282040324, 0.00106420379101098, 0.0010041851237173},
              new double[] {0.00404105717638161, 0.0954661989259584, 0.120045861110682, 0.0280655628382601, 0.0424146942436886, 0.0127214064220143, 0.0191011294771041, 0.00106421523280913, 0.000112155842630271},
         };
-        /// This table is used by HandPlayerOpponentOdds and contains the odds of each type of 
+
+        /// This table is used by HandPlayerOpponentOdds and contains the odds of each type of
         /// hand occuring for a random player when the board is currently empty. This calculation
         /// normally takes about 5 minutes, so the values are precalculated to save time.
         private static readonly double[][] PreCalcOppOdds = {
@@ -637,10 +637,10 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
              new double[] {0.0520210041379263, 0.267047033513599, 0.183376907991352, 0.0384575881623919, 0.0430645769366531, 0.029733230185523, 0.0244845155285224, 0.00162703585344658, 0.000343801720503187},
              new double[] {0.056705780453633, 0.284876445742707, 0.19390776118145, 0.0405017490695434, 0.0458511753873192, 0.0286710565985708, 0.0245006313012128, 0.00162780817482152, 0.000325310821214085},
         };
-        #endregion
 
+        #endregion Precalc Odds Table
 
-          /// <summary>
+        /// <summary>
         /// Given a set of pocket cards and a set of board cards this function returns the odds of winning or tying for a player and a random opponent.
         /// </summary>
         /// <param name="ourcards">Pocket mask for the hand.</param>
@@ -735,7 +735,7 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             ulong dead_cards = ourcards | board | oppcards;
             uint ourbest, oppbest;
 
-            foreach (uint handmask in Hands(0UL, ourcards | board | oppcards, 7-BitCount(ourcards | board))) 
+            foreach (uint handmask in Hands(0UL, ourcards | board | oppcards, 7 - BitCount(ourcards | board)))
             {
                 ourbest = Evaluate(ourcards | board | handmask, 7);
                 oppbest = Evaluate(oppcards | board | handmask, 7);
@@ -787,7 +787,8 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             ulong dead_cards = pocket | board;
 
             // Iterate through all possible opponent pocket cards
-            foreach (uint oppPocket in Hands(0UL, dead_cards, 2)) {
+            foreach (uint oppPocket in Hands(0UL, dead_cards, 2))
+            {
                 // Note Current State
                 uint opprank = Evaluate(oppPocket | board, BitCount(oppPocket | board));
                 if (ourrank > opprank)
@@ -818,6 +819,7 @@ namespace TexasHoldem.AI.SmartPlayer.PreCalculations
             else
                 npot = 0;
         }
-        #endregion
+
+        #endregion Analysis Functions
     }
 }

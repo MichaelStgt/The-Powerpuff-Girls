@@ -74,20 +74,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\AI\TexasHoldem.AI.DummyPlayer\TexasHoldem.AI.DummyPlayer.csproj">
-      <Project>{8f8a872b-a022-4085-aabc-d3bc12b7c1d8}</Project>
-      <Name>TexasHoldem.AI.DummyPlayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\AI\TexasHoldem.AI.SmartPlayer\TexasHoldem.AI.SmartPlayer.csproj">
-      <Project>{e7ba8017-d56e-485c-81d1-a1ccdaae624f}</Project>
-      <Name>TexasHoldem.AI.SmartPlayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TexasHoldem.Logic\TexasHoldem.Logic.csproj">
-      <Project>{bcf99e8b-2025-444f-83c7-24542fcf33df}</Project>
-      <Name>TexasHoldem.Logic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
@@ -103,6 +89,20 @@
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-beta016\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-beta016\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-beta016\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AI\TexasHoldem.AI.DummyPlayer\TexasHoldem.AI.DummyPlayer.csproj">
+      <Project>{8f8a872b-a022-4085-aabc-d3bc12b7c1d8}</Project>
+      <Name>TexasHoldem.AI.DummyPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AI\TexasHoldem.AI.SmartPlayer\TexasHoldem.AI.SmartPlayer.csproj">
+      <Project>{e7ba8017-d56e-485c-81d1-a1ccdaae624f}</Project>
+      <Name>TexasHoldem.AI.SmartPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TexasHoldem.Logic\TexasHoldem.Logic.csproj">
+      <Project>{bcf99e8b-2025-444f-83c7-24542fcf33df}</Project>
+      <Name>TexasHoldem.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

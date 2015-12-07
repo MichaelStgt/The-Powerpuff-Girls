@@ -3,16 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using TexasHoldem.Logic;
-    using TexasHoldem.Logic.Extensions;
-    using TexasHoldem.Logic.Players;
-    using TexasHoldem.Logic.Cards;
     using Helpers;
     using PreCalculations;
+    using TexasHoldem.Logic;
+    using TexasHoldem.Logic.Players;
 
-    // TODO: This player is far far away from being smart! - Sure thing!
     public class SmartPlayer : BasePlayer
     {
         private IList<int> opponentActions = new List<int>();
@@ -127,7 +122,7 @@
                 }
                 else if (context.IsAllIn)
                 {
-                    if (turn.Call >= 2 && (moneyToCall/myMoney < 0.5))
+                    if (turn.Call >= 2 && (moneyToCall / myMoney < 0.5))
                     {
                         return call;
                     }
@@ -188,7 +183,6 @@
             }
 
             return call;
-
         }
     }
 }

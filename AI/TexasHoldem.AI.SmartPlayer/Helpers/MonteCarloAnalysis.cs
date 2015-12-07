@@ -30,7 +30,6 @@
                 bool greaterthan = true;
                 bool greaterthanequal = true;
 
-
                 // Get Opponent hand info
                 ulong oppmask = Hand.RandomHand(deadmask, 2);
                 uint oppHandVal = Hand.Evaluate(oppmask | boardmask);
@@ -48,7 +47,6 @@
                 {
                     greaterthan = false;
                 }
-
 
                 // Calculate stats
                 if (greaterthan)
