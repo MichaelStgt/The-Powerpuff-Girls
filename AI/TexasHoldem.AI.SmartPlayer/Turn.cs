@@ -25,27 +25,27 @@
         /// </summary>
         /// <param name="ourCards"><c>string</c> that contains our cards <example>example: "2h 3h"</example></param>
         /// <param name="communityCards"><c>string</c> that contains the community cards <example>example: "Jh Qh 2d"</example></param>
-        /// <param name="round"><c>GameRoundType</c> is enum that informs us in which round are we currently playing <example>example: GameRoundType.PreFlop</example></param>
-        /// <param name="gap"><c>int</c> that informs us what is the gap between the cards in our hand
+        /// <param name="currentRound"><c>GameRoundType</c> is enum that informs us in which round are we currently playing <example>example: GameRoundType.PreFlop</example></param>
+        /// <param name="gapBetweenOurCards"><c>int</c> that informs us what is the gap between the cards in our hand
         /// <example>example: If we have Jack and 8 -> gap = 2, 
         /// If we have King and 6 -> gap = 6</example></param>
         /// <returns><c>Turn</c> object that holds the chance values for Fold, Call, Raise and AllIn</returns>
         /// <seealso cref="http://www.codeproject.com/Articles/19092/More-Texas-Holdem-Analysis-in-C-Part-2"/>
-        public Turn DecideTurn(string ourCards, string communityCards, GameRoundType round, int gap)
+        public Turn DecideChanceForAction(string ourCards, string communityCards, GameRoundType currentRound, int gapBetweenOurCards)
         {
             var output = new Turn();
-            var handourHand = new Hand(ourCards, communityCards);
+            var ourHand = new Hand(ourCards, communityCards);
             int chance = 0;
 
-            switch (round)
+            switch (currentRound)
             {
                 case GameRoundType.PreFlop:
-                    if (gap >= 4)
+                    if (gapBetweenOurCards >= 4)
                     {
                         this.Call++;
                         this.Fold++;
                     }
-                    else if (gap >= 2)
+                    else if (gapBetweenOurCards >= 2)
                     {
                         this.Raise++;
                         this.Call++;
@@ -56,7 +56,7 @@
                         this.Raise++;
                     }
 
-                    var handTypeValue = handourHand.HandTypeValue;
+                    var handTypeValue = ourHand.HandTypeValue;
                     switch (handTypeValue)
                     {
                         case Hand.HandTypes.HighCard:

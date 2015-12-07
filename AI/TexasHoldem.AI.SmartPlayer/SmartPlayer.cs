@@ -19,24 +19,24 @@
 
         public override string Name { get; } = "The_Powerpuff_Girls_Player" + Guid.NewGuid();
 
-        public override void EndRound(EndRoundContext context)
-        {
-            var opponentMoves = context.RoundActions.Where(x => x.PlayerName != this.Name);
+        //public override void EndRound(EndRoundContext context)
+        //{
+        //    var opponentMoves = context.RoundActions.Where(x => x.PlayerName != this.Name);
 
-            foreach (var oponentAction in opponentMoves)
-            {
-                this.opponentActions.Add((int)oponentAction.Action.Type);
-            }
+        //    foreach (var oponentAction in opponentMoves)
+        //    {
+        //        this.opponentActions.Add((int)oponentAction.Action.Type);
+        //    }
 
-            base.EndRound(context);
-        }
+        //    base.EndRound(context);
+        //}
 
         public override PlayerAction GetTurn(GetTurnContext context)
         {
             var ourCards = ParseHandToString.GenerateStringFromCard(this.FirstCard) + " " + ParseHandToString.GenerateStringFromCard(this.SecondCard);
-            var gap = Hand.GapCount(Hand.ParseHand(ourCards));
-            var openedCards = this.CommunityCards;
-            var round = context.RoundType;
+            var gapBetweenOurCards = Hand.GapCount(Hand.ParseHand(ourCards));
+            var openedCommunityCards = this.CommunityCards;
+            var currentRound = context.RoundType;
             var openedCardsString = string.Empty;
             var turn = new Turn();
             var myMoney = context.MoneyLeft;
@@ -46,21 +46,21 @@
             var smallBlind = context.SmallBlind;
             var moneyToCall = context.MoneyToCall;
 
-            if (round != GameRoundType.PreFlop)
+            if (currentRound != GameRoundType.PreFlop)
             {
-                for (int i = 0; i < openedCards.Count; i++)
+                for (int i = 0; i < openedCommunityCards.Count; i++)
                 {
                     if (i != 0)
                     {
-                        openedCardsString = openedCardsString + " " + ParseHandToString.GenerateStringFromCard(openedCards.ElementAt(i));
+                        openedCardsString = openedCardsString + " " + ParseHandToString.GenerateStringFromCard(openedCommunityCards.ElementAt(i));
                     }
                     else
                     {
-                        openedCardsString = ParseHandToString.GenerateStringFromCard(openedCards.ElementAt(i));
+                        openedCardsString = ParseHandToString.GenerateStringFromCard(openedCommunityCards.ElementAt(i));
                     }
                 }
 
-                turn.DecideTurn(ourCards, openedCardsString, round, gap);
+                turn.DecideChanceForAction(ourCards, openedCardsString, currentRound, gapBetweenOurCards);
                 var previous = context.PreviousRoundActions.LastOrDefault().Action;
 
                 if (previous == null)
